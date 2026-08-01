@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Account — TargetBand9</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a href="index.html" class="logo"><span class="dot"></span>TargetBand9</a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-cta" id="nav-auth-slot">
+      <a href="login.html" class="btn btn-outline btn-sm">Log in</a>
+      <a href="signup.html" class="btn btn-coral btn-sm">Sign up</a>
+    </div>
+    <button class="nav-toggle" aria-label="Menu">☰</button>
+  </div>
+</nav>
+
+<section style="padding: 70px 0;">
+  <div class="container" style="max-width: 640px;">
+    <div class="form-panel" style="max-width:100%;">
+      <h2>My account</h2>
+      <p class="sub" id="account-email">Loading...</p>
+
+      <div id="status-card" style="padding:18px; border-radius:10px; background: var(--paper-dim); margin-bottom:24px;">
+        <div class="mono" style="font-size:12px; text-transform:uppercase; letter-spacing:0.08em; color:#7C749E; margin-bottom:6px;">Plan status</div>
+        <div id="status-text" style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:18px;">Checking...</div>
+      </div>
+
+      <div id="upgrade-cta" style="display:none;">
+        <a href="pricing.html" class="btn btn-coral btn-block">Upgrade to premium</a>
+      </div>
+
+      <div id="premium-links" style="display:none; margin-top:16px;">
+        <div class="grid-2">
+          <a href="reading.html" class="btn btn-outline-dark btn-sm">Reading</a>
+          <a href="listening.html" class="btn btn-outline-dark btn-sm">Listening</a>
+          <a href="writing.html" class="btn btn-outline-dark btn-sm">Writing</a>
+          <a href="speaking.html" class="btn btn-outline-dark btn-sm">Speaking</a>
+        </div>
+      </div>
+
+      <div style="margin-top:24px; text-align:center;">
+        <button onclick="signOut()" class="btn btn-outline-dark btn-sm">Log out</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none; padding-top:0;">
+      <span>© 2026 TargetBand9. All rights reserved.</span>
+      <span><a href="contact.html" style="color:var(--muted);">Contact</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-client.js"></script>
+<script src="app.js"></script>
+<script>
+async function loadDashboard() {
+  const user = await getCurrentUser();
+  if (!user) {
+    window.location.href = "login.html";
+    return;
+  }
+  document.getElementById('account-email').textContent = user.email;
+
+  const premium = await isPremiumUser();
+  const statusText = document.getElementById('status-text');
+  if (premium) {
+    statusText.textContent = "✓ Premium — full access";
+    statusText.style.color = "#009684";
+    document.getElementById('premium-links').style.display = 'block';
+  } else {
+    statusText.textContent = "Free plan";
+    document.getElementById('upgrade-cta').style.display = 'block';
+  }
+}
+loadDashboard();
+</script>
+</body>
+</html>
