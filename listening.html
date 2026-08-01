@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Listening Practice — TargetBand9</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a href="index.html" class="logo"><span class="dot"></span>TargetBand9</a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-cta" id="nav-auth-slot">
+      <a href="login.html" class="btn btn-outline btn-sm">Log in</a>
+      <a href="signup.html" class="btn btn-coral btn-sm">Sign up</a>
+    </div>
+    <button class="nav-toggle" aria-label="Menu">☰</button>
+  </div>
+</nav>
+
+<header class="hero" style="padding: 60px 0 50px;">
+  <div class="container">
+    <div class="eyebrow">Premium · Listening</div>
+    <h1 style="font-size: clamp(30px,4vw,42px);">Listening Practice</h1>
+    <p class="lead">Play the recording, answer the questions, then check your band score.</p>
+  </div>
+</header>
+
+<section id="gated-content" style="padding-top: 50px; display:none;">
+  <div class="container" style="max-width: 780px;">
+
+    <div class="audio-card">
+      <div class="audio-icon">🎧</div>
+      <audio controls>
+        <source src="audio/listening-sample.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
+    </div>
+
+    <div class="sheet">
+      <div class="sheet-header">
+        <span>Listening test — 5 questions</span>
+        <span class="progress-label" id="progress-label">0 / 5 answered</span>
+      </div>
+      <form id="quiz-form"></form>
+      <div class="sheet-actions">
+        <button type="button" id="retry-btn" class="btn btn-outline-dark btn-sm">Retry test</button>
+        <button type="button" id="submit-btn" class="btn btn-coral" disabled>Submit answers</button>
+      </div>
+      <div class="sheet-results" id="results">
+        <div class="band-label">Estimated Listening band score</div>
+        <div class="band-score" id="band-score">—</div>
+        <div class="score-detail" id="score-detail"></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="logo"><span class="dot"></span>TargetBand9</a>
+        <p>Full-length IELTS mock tests with instant band scoring for Reading, Listening, Writing and Speaking.</p>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="mock-test.html">Free Mock Test</a></li>
+          <li><a href="pricing.html">Pricing</a></li>
+          <li><a href="about.html">About</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Skills</h4>
+        <ul>
+          <li><a href="reading.html">Reading</a></li>
+          <li><a href="listening.html">Listening</a></li>
+          <li><a href="writing.html">Writing</a></li>
+          <li><a href="speaking.html">Speaking</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:hello@targetband9.com">hello@targetband9.com</a></li>
+          <li><a href="contact.html">Contact form</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 TargetBand9. All rights reserved.</span>
+      <span>Made for IELTS candidates aiming higher.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-client.js"></script>
+<script src="app.js"></script>
+<script src="quiz-engine.js"></script>
+<script>
+const QUESTIONS = [
+  { text: "What is the main reason the speaker is calling?", options: ["To cancel a booking", "To ask about opening hours", "To complain about service", "To make a reservation"], correct: 3 },
+  { text: "How many people will be in the group?", options: ["Two", "Four", "Six", "Eight"], correct: 2 },
+  { text: "What time does the event start?", options: ["6:00 PM", "6:30 PM", "7:00 PM", "7:30 PM"], correct: 1 },
+  { text: "What does the speaker say about parking?", options: ["It's free", "It's limited", "It's unavailable", "It requires a permit"], correct: 1 },
+  { text: "What does the woman recommend bringing?", options: ["An umbrella", "A student ID", "Cash only", "A reservation confirmation"], correct: 3 }
+];
+
+async function init() {
+  const ok = await requirePremium();
+  if (!ok) return;
+  document.getElementById('gated-content').style.display = 'block';
+  initQuiz({
+    questions: QUESTIONS,
+    formId: 'quiz-form', submitId: 'submit-btn', retryId: 'retry-btn',
+    progressId: 'progress-label', resultsId: 'results', bandId: 'band-score', detailId: 'score-detail'
+  });
+}
+init();
+</script>
+</body>
+</html>
