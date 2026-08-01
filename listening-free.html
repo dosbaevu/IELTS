@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free Listening Practice — TargetBand9</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a href="index.html" class="logo"><span class="dot"></span>TargetBand9</a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-cta" id="nav-auth-slot">
+      <a href="login.html" class="btn btn-outline btn-sm">Log in</a>
+      <a href="signup.html" class="btn btn-coral btn-sm">Sign up</a>
+    </div>
+    <button class="nav-toggle" aria-label="Menu">☰</button>
+  </div>
+</nav>
+
+<header class="hero" style="padding: 60px 0 50px;">
+  <div class="container">
+    <div class="eyebrow">Free trial · Listening</div>
+    <h1 style="font-size: clamp(30px,4vw,42px);">Listening — Free Sample</h1>
+    <p class="lead">One recording, one question set — on the house.</p>
+  </div>
+</header>
+
+<section style="padding-top: 50px;">
+  <div class="container" style="max-width: 780px;">
+
+    <!-- ============================================================
+         AUDIO — upload your mp3 into the /audio folder in your repo,
+         then replace "audio/your-file.mp3" below with its filename.
+         ============================================================ -->
+    <div class="paste-box">
+      <div class="paste-label">Replace with your audio file</div>
+      <p class="placeholder-text" style="margin-bottom:14px;">Upload an mp3 into the /audio folder, then update the src path below.</p>
+      <div class="audio-card" style="margin-bottom:0;">
+        <div class="audio-icon">🎧</div>
+        <audio controls>
+          <source src="audio/your-file.mp3" type="audio/mpeg">
+          Your browser does not support the audio element.
+        </audio>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         QUESTIONS — edit the QUESTIONS array at the bottom of this
+         file to match your recording.
+         ============================================================ -->
+    <div class="sheet">
+      <div class="sheet-header">
+        <span>Listening test</span>
+        <span class="progress-label" id="progress-label">0 / 0 answered</span>
+      </div>
+      <form id="quiz-form"></form>
+      <div class="sheet-actions">
+        <button type="button" id="retry-btn" class="btn btn-outline-dark btn-sm">Retry test</button>
+        <button type="button" id="submit-btn" class="btn btn-coral" disabled>Submit answers</button>
+      </div>
+      <div class="sheet-results" id="results">
+        <div class="band-label">Estimated Listening band score</div>
+        <div class="band-score" id="band-score">—</div>
+        <div class="score-detail" id="score-detail"></div>
+        <div class="mt-32">
+          <a href="signup.html" class="btn btn-coral">Sign up for unlimited Listening practice</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="logo"><span class="dot"></span>TargetBand9</a>
+        <p>Full-length IELTS mock tests with instant band scoring for Reading, Listening, Writing and Speaking.</p>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="start.html">Free Practice</a></li>
+          <li><a href="pricing.html">Pricing</a></li>
+          <li><a href="about.html">About</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Skills</h4>
+        <ul>
+          <li><a href="reading.html">Reading</a></li>
+          <li><a href="listening.html">Listening</a></li>
+          <li><a href="writing.html">Writing</a></li>
+          <li><a href="speaking.html">Speaking</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:hello@targetband9.com">hello@targetband9.com</a></li>
+          <li><a href="contact.html">Contact form</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 TargetBand9. All rights reserved.</span>
+      <span>Made for IELTS candidates aiming higher.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="firebase-client.js"></script>
+<script src="app.js"></script>
+<script src="quiz-engine.js"></script>
+<script>
+// ============================================================
+// EDIT THIS ARRAY to match the audio you added above.
+// ============================================================
+const QUESTIONS = [
+  { text: "Replace this with your first question.", options: ["Option A", "Option B", "Option C", "Option D"], correct: 0 },
+  { text: "Replace this with your second question.", options: ["Option A", "Option B", "Option C", "Option D"], correct: 0 }
+];
+
+initQuiz({
+  questions: QUESTIONS,
+  formId: 'quiz-form', submitId: 'submit-btn', retryId: 'retry-btn',
+  progressId: 'progress-label', resultsId: 'results', bandId: 'band-score', detailId: 'score-detail'
+});
+document.getElementById('progress-label').textContent = `0 / ${QUESTIONS.length} answered`;
+</script>
+</body>
+</html>
