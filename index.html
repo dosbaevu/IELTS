@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TargetBand9 — IELTS Reading Practice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink: #1B2430;
+    --ink-soft: #2E3A4C;
+    --paper: #FBF9F4;
+    --paper-line: #E4DECF;
+    --gold: #C9A227;
+    --gold-deep: #9E7E17;
+    --correct: #3F7D58;
+    --incorrect: #B33F3F;
+    --muted: #6B7280;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'Inter', sans-serif;
+    min-height:100vh;
+  }
+  .wrap{
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+  header.top{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    border-bottom: 1px solid rgba(251,249,244,0.15);
+    padding-bottom: 20px;
+    margin-bottom: 40px;
+  }
+  .brand{
+    font-family:'JetBrains Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  .brand span{color: var(--paper); opacity:0.6;}
+  .test-meta{
+    font-family:'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: rgba(251,249,244,0.5);
+    text-align:right;
+  }
+  h1.title{
+    font-family:'Source Serif 4', serif;
+    font-weight: 700;
+    font-size: clamp(32px, 5vw, 44px);
+    line-height: 1.1;
+    margin: 0 0 10px;
+    color: var(--paper);
+  }
+  p.subtitle{
+    font-family:'Source Serif 4', serif;
+    font-style: italic;
+    font-size: 17px;
+    color: rgba(251,249,244,0.65);
+    margin: 0 0 44px;
+    max-width: 52ch;
+  }
+  .sheet{
+    background: var(--paper);
+    color: var(--ink);
+    border-radius: 4px;
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,0.5);
+    overflow:hidden;
+  }
+  .sheet-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding: 18px 28px;
+    border-bottom: 1px dashed var(--paper-line);
+    font-family:'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  #progress-label{color: var(--gold-deep); font-weight:700;}
+  .question{
+    padding: 30px 28px;
+    border-bottom: 1px solid var(--paper-line);
+  }
+  .question:last-of-type{border-bottom:none;}
+  .q-row{
+    display:flex;
+    gap: 16px;
+    align-items:flex-start;
+  }
+  .q-num{
+    font-family:'JetBrains Mono', monospace;
+    font-weight:700;
+    font-size: 15px;
+    color: var(--gold-deep);
+    width: 28px;
+    flex-shrink:0;
+    padding-top: 2px;
+  }
+  .q-body{flex:1;}
+  .q-text{
+    font-family:'Source Serif 4', serif;
+    font-size: 18px;
+    line-height: 1.5;
+    margin: 0 0 16px;
+    color: var(--ink);
+  }
+  .options{
+    display:grid;
+    gap: 10px;
+  }
+  .option{
+    display:flex;
+    align-items:center;
+    gap: 12px;
+    cursor:pointer;
+    padding: 10px 12px;
+    border-radius: 3px;
+    transition: background 0.15s ease;
+  }
+  .option:hover{background: rgba(201,162,39,0.08);}
+  .bubble{
+    width: 26px;
+    height: 26px;
+    flex-shrink:0;
+    border-radius: 50%;
+    border: 2px solid var(--ink-soft);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight:700;
+    color: var(--ink-soft);
+    transition: all 0.15s ease;
+  }
+  .option input{display:none;}
+  .option input:checked + .bubble{
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper);
+  }
+  .option-text{
+    font-size: 15px;
+    color: var(--ink-soft);
+  }
+  /* Answer review states, applied after submit */
+  .question.correct .q-num{color: var(--correct);}
+  .question.incorrect .q-num{color: var(--incorrect);}
+  .option.mark-correct .bubble{background: var(--correct); border-color: var(--correct); color:#fff;}
+  .option.mark-incorrect .bubble{background: var(--incorrect); border-color: var(--incorrect); color:#fff;}
+
+  .actions{
+    padding: 28px;
+    display:flex;
+    justify-content:flex-end;
+    gap: 12px;
+  }
+  button{
+    font-family:'JetBrains Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 700;
+    padding: 14px 28px;
+    border-radius: 3px;
+    border: none;
+    cursor:pointer;
+    transition: transform 0.1s ease, opacity 0.15s ease;
+  }
+  button:active{transform: scale(0.98);}
+  #submit-btn{
+    background: var(--gold);
+    color: var(--ink);
+  }
+  #submit-btn:hover{background: var(--gold-deep); color: var(--paper);}
+  #submit-btn:disabled{opacity:0.4; cursor:not-allowed;}
+  #retry-btn{
+    background: transparent;
+    color: var(--ink);
+    border: 1.5px solid var(--ink);
+    display:none;
+  }
+  #retry-btn:hover{background: var(--ink); color: var(--paper);}
+
+  .results{
+    display:none;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 40px 28px;
+    text-align:center;
+  }
+  .results.show{display:block;}
+  .band-label{
+    font-family:'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(251,249,244,0.5);
+    margin-bottom: 8px;
+  }
+  .band-score{
+    font-family:'Source Serif 4', serif;
+    font-weight: 700;
+    font-size: 88px;
+    line-height: 1;
+    color: var(--gold);
+    margin: 0 0 8px;
+  }
+  .score-detail{
+    font-family:'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: rgba(251,249,244,0.7);
+  }
+  footer{
+    text-align:center;
+    margin-top: 40px;
+    font-family:'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: rgba(251,249,244,0.35);
+  }
+  @media (max-width: 600px){
+    .wrap{padding: 32px 16px 64px;}
+    header.top{flex-direction:column; gap:6px; align-items:flex-start;}
+    .test-meta{text-align:left;}
+    .band-score{font-size: 64px;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">TargetBand<span>9</span>.com</div>
+    <div class="test-meta">Reading Practice · Passage 1</div>
+  </header>
+
+  <h1 class="title">Free IELTS Reading Test</h1>
+  <p class="subtitle">Answer all questions, then submit to see your correct count and estimated band score.</p>
+
+  <div class="sheet">
+    <div class="sheet-header">
+      <span>Answer sheet</span>
+      <span id="progress-label">0 / 5 answered</span>
+    </div>
+
+    <form id="quiz-form"></form>
+
+    <div class="actions">
+      <button type="button" id="retry-btn">Retry test</button>
+      <button type="button" id="submit-btn" disabled>Submit answers</button>
+    </div>
+
+    <div class="results" id="results">
+      <div class="band-label">Estimated band score</div>
+      <div class="band-score" id="band-score">—</div>
+      <div class="score-detail" id="score-detail"></div>
+    </div>
+  </div>
+
+  <footer>Practice questions refresh each session · TargetBand9</footer>
+</div>
+
+<script>
+// ---- EDIT YOUR QUESTIONS HERE ----
+// Add/remove objects freely. "correct" is the zero-based index of the right option.
+const QUESTIONS = [
+  {
+    text: "The word 'ubiquitous' in paragraph 2 most nearly means:",
+    options: ["Rare and hard to find", "Present everywhere", "Extremely expensive", "Difficult to understand"],
+    correct: 1
+  },
+  {
+    text: "According to the passage, the main cause of coral bleaching is:",
+    options: ["Overfishing", "Plastic pollution", "Rising ocean temperatures", "Ship traffic"],
+    correct: 2
+  },
+  {
+    text: "Which of the following is NOT mentioned as a renewable energy source?",
+    options: ["Solar power", "Wind power", "Natural gas", "Geothermal power"],
+    correct: 2
+  },
+  {
+    text: "The author's tone in the final paragraph can best be described as:",
+    options: ["Dismissive", "Cautiously optimistic", "Angry", "Indifferent"],
+    correct: 1
+  },
+  {
+    text: "What does the writer suggest is the biggest barrier to change?",
+    options: ["Lack of technology", "Public awareness", "Cost of implementation", "Government policy"],
+    correct: 2
+  }
+];
+// -----------------------------------
+
+const form = document.getElementById('quiz-form');
+const submitBtn = document.getElementById('submit-btn');
+const retryBtn = document.getElementById('retry-btn');
+const progressLabel = document.getElementById('progress-label');
+const resultsPanel = document.getElementById('results');
+const bandScoreEl = document.getElementById('band-score');
+const scoreDetailEl = document.getElementById('score-detail');
+
+let answered = new Set();
+
+function renderQuestions(){
+  form.innerHTML = '';
+  QUESTIONS.forEach((q, qi) => {
+    const qDiv = document.createElement('div');
+    qDiv.className = 'question';
+    qDiv.dataset.index = qi;
+
+    const row = document.createElement('div');
+    row.className = 'q-row';
+
+    const num = document.createElement('div');
+    num.className = 'q-num';
+    num.textContent = String(qi + 1).padStart(2, '0');
+
+    const body = document.createElement('div');
+    body.className = 'q-body';
+
+    const text = document.createElement('p');
+    text.className = 'q-text';
+    text.textContent = q.text;
+
+    const opts = document.createElement('div');
+    opts.className = 'options';
+
+    q.options.forEach((optText, oi) => {
+      const label = document.createElement('label');
+      label.className = 'option';
+
+      const input = document.createElement('input');
+      input.type = 'radio';
+      input.name = 'q' + qi;
+      input.value = oi;
+      input.addEventListener('change', () => {
+        answered.add(qi);
+        updateProgress();
+      });
+
+      const bubble = document.createElement('span');
+      bubble.className = 'bubble';
+      bubble.textContent = String.fromCharCode(65 + oi);
+
+      const optSpan = document.createElement('span');
+      optSpan.className = 'option-text';
+      optSpan.textContent = optText;
+
+      label.appendChild(input);
+      label.appendChild(bubble);
+      label.appendChild(optSpan);
+      opts.appendChild(label);
+    });
+
+    body.appendChild(text);
+    body.appendChild(opts);
+    row.appendChild(num);
+    row.appendChild(body);
+    qDiv.appendChild(row);
+    form.appendChild(qDiv);
+  });
+}
+
+function updateProgress(){
+  progressLabel.textContent = `${answered.size} / ${QUESTIONS.length} answered`;
+  submitBtn.disabled = answered.size < QUESTIONS.length;
+}
+
+// IELTS-style band conversion for a 5-question mini test, scaled proportionally
+// (approximates the real IELTS Reading raw-score-to-band table)
+function scoreToBand(correctCount, total){
+  const pct = correctCount / total;
+  if (pct >= 0.97) return 9.0;
+  if (pct >= 0.90) return 8.5;
+  if (pct >= 0.83) return 8.0;
+  if (pct >= 0.75) return 7.5;
+  if (pct >= 0.65) return 7.0;
+  if (pct >= 0.55) return 6.5;
+  if (pct >= 0.45) return 6.0;
+  if (pct >= 0.35) return 5.5;
+  if (pct >= 0.27) return 5.0;
+  if (pct >= 0.20) return 4.5;
+  if (pct >= 0.12) return 4.0;
+  return 3.5;
+}
+
+function handleSubmit(){
+  let correctCount = 0;
+
+  QUESTIONS.forEach((q, qi) => {
+    const qDiv = form.querySelector(`.question[data-index="${qi}"]`);
+    const selected = form.querySelector(`input[name="q${qi}"]:checked`);
+    const selectedVal = selected ? parseInt(selected.value, 10) : null;
+    const isCorrect = selectedVal === q.correct;
+    if (isCorrect) correctCount++;
+
+    qDiv.classList.add(isCorrect ? 'correct' : 'incorrect');
+
+    const options = qDiv.querySelectorAll('.option');
+    options.forEach((optLabel, oi) => {
+      const input = optLabel.querySelector('input');
+      input.disabled = true;
+      if (oi === q.correct) optLabel.classList.add('mark-correct');
+      else if (oi === selectedVal) optLabel.classList.add('mark-incorrect');
+    });
+  });
+
+  const band = scoreToBand(correctCount, QUESTIONS.length);
+  bandScoreEl.textContent = band.toFixed(1);
+  scoreDetailEl.textContent = `${correctCount} of ${QUESTIONS.length} correct`;
+  resultsPanel.classList.add('show');
+
+  submitBtn.style.display = 'none';
+  retryBtn.style.display = 'inline-block';
+  resultsPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function resetQuiz(){
+  answered = new Set();
+  resultsPanel.classList.remove('show');
+  submitBtn.style.display = 'inline-block';
+  submitBtn.disabled = true;
+  retryBtn.style.display = 'none';
+  renderQuestions();
+  progressLabel.textContent = `0 / ${QUESTIONS.length} answered`;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+submitBtn.addEventListener('click', handleSubmit);
+retryBtn.addEventListener('click', resetQuiz);
+
+renderQuestions();
+</script>
+</body>
+</html>
