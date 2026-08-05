@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Log In / Register</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body style="display: flex; justify-content: center; align-items: center; min-height: 100vh; background-color: var(--white);">
+    
+    <div class="card" id="authBox" style="width: 100%; max-width: 400px; text-align: left;">
+        <h2 style="margin-bottom: 20px;">Welcome</h2>
+        <input type="email" placeholder="Email address" style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid var(--border); border-radius: 6px;">
+        <input type="password" placeholder="Password" style="width: 100%; padding: 10px; margin-bottom: 20px; border: 1px solid var(--border); border-radius: 6px;">
+        
+        <button class="btn-primary" id="continueBtn" style="width: 100%; margin-bottom: 15px;">Continue</button>
+        <button class="btn-login" style="width: 100%; text-align: center;">Continue with Google</button>
+    </div>
+
+    <!-- Verification Step (Hidden by default) -->
+    <div class="card hidden" id="verifyBox" style="width: 100%; max-width: 400px;">
+        <h2>Check your email</h2>
+        <p style="color: var(--text-muted); margin: 15px 0;">We've sent a verification link to your email. Please click it to activate your account.</p>
+        <button class="btn-primary" id="simulateVerifyBtn" style="width: 100%;">[Demo: Simulate Clicking Link]</button>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
